@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using SQLite;
 
 namespace AppMinhasCompras.Models
 {
-    internal class Produto
+    public class Produto
     {
+        [PrimaryKey, AutoIncrement]
+        public string Id { get; set; }
+        public string Desricao { get; set; }
+        public double Quantidade { get; set; }
+        public double Preco {  get; set; }
     }
 }
