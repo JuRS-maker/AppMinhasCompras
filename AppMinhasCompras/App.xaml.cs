@@ -31,7 +31,11 @@ namespace AppMinhasCompras
 
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("pt-BR");
 
-            MainPage = new NavigationPage(new Views.ListaProduto());
+            MainPage = new NavigationPage(new Views.ListaProduto())
+            {
+                BarBackgroundColor = Color.FromArgb("#10B981"),
+                BarTextColor = Colors.White
+            };
 
         }
 
