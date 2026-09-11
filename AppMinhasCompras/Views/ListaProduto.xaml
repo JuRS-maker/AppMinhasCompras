@@ -2,73 +2,110 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="AppMinhasCompras.Views.ListaProduto"
-             Title="ListaProduto">
+             Title="Minhas Compras"
+             BackgroundColor="#F3F4F6">
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Somar" Clicked="ToolbarItem_Clicked_1"/>
-        <ToolbarItem Text="Adicionar" Clicked="ToolbarItem_Clicked" />    
+        <ToolbarItem Text="Somar" Clicked="ToolbarItem_Clicked_1" Priority="0"/>
+        <ToolbarItem Text="Adicionar" Clicked="ToolbarItem_Clicked" Priority="1" />
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
         <ResourceDictionary>
             <Style TargetType="Label">
                 <Setter Property="VerticalTextAlignment" Value="Center" />
-                <Setter Property="TextColor" Value="Black" />
+                <Setter Property="TextColor" Value="#1F2937" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
 
-    <StackLayout>
-        <SearchBar x:Name="txt_search" 
-                   Margin="-15, 0, 0, 0"
-                   Placeholder="Busca de Produtos" 
-                   TextChanged="txt_search_TextChanged"/>
+    <Grid RowDefinitions="Auto, Auto, *" Padding="8" RowSpacing="8">
 
-        <HorizontalStackLayout Margin="10,5" Spacing="10">
-            <Label Text="Filtrar por Categoria:" VerticalOptions="Center"/>
-            <Picker x:Name="pck_categoria"
-                    Title="Todas"
-                    HorizontalOptions="FillAndExpand"
-                    SelectedIndexChanged="pck_categoria_SelectedIndexChanged"/>
-        </HorizontalStackLayout>
+        <!-- Área do Filtro e Busca -->
+        <Border Grid.Row="0"
+                Padding="8"
+                StrokeShape="RoundRectangle 10"
+                Stroke="#E5E7EB"
+                BackgroundColor="White">
 
-        <Frame Padding="0" Margin="10" VerticalOptions="FillAndExpand">
+            <VerticalStackLayout Spacing="6">
+                <SearchBar x:Name="txt_search" 
+                           Placeholder="Busca de produtos..." 
+                           TextChanged="txt_search_TextChanged"
+                           BackgroundColor="Transparent"
+                           Margin="0"/>
+
+                <BoxView HeightRequest="1" Color="#F3F4F6" HorizontalOptions="Fill" />
+
+                <HorizontalStackLayout Spacing="8" VerticalOptions="Center">
+                    <Label Text="Filtrar Categoria:" 
+                           FontAttributes="Bold" 
+                           FontSize="13" 
+                           TextColor="#4B5563"
+                           VerticalOptions="Center" />
+
+                    <Picker x:Name="pck_categoria"
+                            Title="Todas"
+                            HorizontalOptions="FillAndExpand"
+                            SelectedIndexChanged="pck_categoria_SelectedIndexChanged" />
+                </HorizontalStackLayout>
+            </VerticalStackLayout>
+        </Border>
+
+        <!-- Cabeçalho da Tabela -->
+        <Border Grid.Row="1"
+                Padding="6,8"
+                StrokeShape="RoundRectangle 8"
+                Stroke="Transparent"
+                BackgroundColor="#10B981">
+
+            <Grid ColumnDefinitions="22, 2.5*, 1.4*, 25, 1.8*, 1.6*" ColumnSpacing="3">
+                <Label Grid.Column="0" Text="ID" FontAttributes="Bold" TextColor="White" FontSize="10" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="1" Text="Descrição" FontAttributes="Bold" TextColor="White" FontSize="10"/>
+                <Label Grid.Column="2" Text="Preço" FontAttributes="Bold" TextColor="White" FontSize="10" HorizontalTextAlignment="End"/>
+                <Label Grid.Column="3" Text="Qtd" FontAttributes="Bold" TextColor="White" FontSize="10" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="4" Text="Categoria" FontAttributes="Bold" TextColor="White" FontSize="10" HorizontalTextAlignment="Center"/>
+                <Label Grid.Column="5" Text="Total" FontAttributes="Bold" TextColor="White" FontSize="10" HorizontalTextAlignment="End"/>
+            </Grid>
+        </Border>
+
+        <!-- Lista de Produtos -->
+        <Border Grid.Row="2"
+                Padding="0"
+                StrokeShape="RoundRectangle 10"
+                Stroke="#E5E7EB"
+                BackgroundColor="White">
+
             <ListView x:Name="lst_produtos" 
-                  IsPullToRefreshEnabled="True"
-                  Refreshing="lst_produtos_Refreshing"
-                  ItemSelected="lst_produtos_ItemSelected">
-
-                <ListView.Header>
-                    <Grid ColumnDefinitions="25, *, 60, 35, 70, 70"
-                          BackgroundColor="{StaticResource Gray100}">
-                        <Label Grid.Column="0" Text="ID" Padding="2"/>
-                        <Label Grid.Column="1" Text="Descrição" Padding="2"/>
-                        <Label Grid.Column="2" Text="Preço" Padding="2"/>
-                        <Label Grid.Column="3" Text="Qtd" Padding="2"/>
-                        <Label Grid.Column="4" Text="Categoria" Padding="2"/>
-                        <Label Grid.Column="5" Text="Total" Padding="2"/>
-                    </Grid>
-                </ListView.Header>
+                      IsPullToRefreshEnabled="True"
+                      Refreshing="lst_produtos_Refreshing"
+                      ItemSelected="lst_produtos_ItemSelected"
+                      SeparatorColor="#E5E7EB"
+                      HasUnevenRows="True">
 
                 <ListView.ItemTemplate>
                     <DataTemplate>
                         <ViewCell>
                             <ViewCell.ContextActions>
-                                <MenuItem Text="Remover" Clicked="MenuItem_Clicked"/>
+                                <MenuItem Text="Remover" IsDestructive="True" Clicked="MenuItem_Clicked"/>
                             </ViewCell.ContextActions>
-                            <Grid ColumnDefinitions="25, *, 60, 35, 70, 70">
-                                <Label Grid.Column="0" Text="{Binding Id}" Padding="2"/>
-                                <Label Grid.Column="1" Text="{Binding Descricao}" Padding="2"/>
-                                <Label Grid.Column="2" Text="{Binding Preco, StringFormat='{}{0:c}'}" Padding="2" />
-                                <Label Grid.Column="3" Text="{Binding Quantidade}" Padding="2"/>
-                                <Label Grid.Column="4" Text="{Binding Categoria}" Padding="2"/>
-                                <Label Grid.Column="5" Text="{Binding Total, StringFormat='{}{0:c}'}" Padding="2" />
+
+                            <Grid ColumnDefinitions="22, 2.5*, 1.4*, 25, 1.8*, 1.6*" 
+                                  Padding="6, 10" 
+                                  ColumnSpacing="3">
+
+                                <Label Grid.Column="0" Text="{Binding Id}" FontSize="11" TextColor="#6B7280" HorizontalTextAlignment="Center"/>
+                                <Label Grid.Column="1" Text="{Binding Descricao}" FontSize="12" FontAttributes="Bold" TextColor="#1F2937" LineBreakMode="TailTruncation"/>
+                                <Label Grid.Column="2" Text="{Binding Preco, StringFormat='{}{0:c}'}" FontSize="11" TextColor="#4B5563" HorizontalTextAlignment="End"/>
+                                <Label Grid.Column="3" Text="{Binding Quantidade}" FontSize="11" TextColor="#4B5563" HorizontalTextAlignment="Center"/>
+                                <Label Grid.Column="4" Text="{Binding Categoria}" FontSize="10" TextColor="#059669" FontAttributes="Italic" HorizontalTextAlignment="Center" LineBreakMode="TailTruncation"/>
+                                <Label Grid.Column="5" Text="{Binding Total, StringFormat='{}{0:c}'}" FontSize="11" FontAttributes="Bold" TextColor="#10B981" HorizontalTextAlignment="End"/>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>
-        </Frame>
-        
-    </StackLayout>
+        </Border>
+
+    </Grid>
 </ContentPage>
