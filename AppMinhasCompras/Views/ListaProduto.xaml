@@ -51,7 +51,6 @@
             </VerticalStackLayout>
         </Border>
 
-        <!-- Cabeçalho da Tabela -->
         <Border Grid.Row="1"
                 Padding="6,8"
                 StrokeShape="RoundRectangle 8"
@@ -68,7 +67,6 @@
             </Grid>
         </Border>
 
-        <!-- Lista de Produtos -->
         <Border Grid.Row="2"
                 Padding="0"
                 StrokeShape="RoundRectangle 10"
