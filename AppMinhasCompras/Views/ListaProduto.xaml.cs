@@ -85,13 +85,50 @@ public partial class ListaProduto : ContentPage
         }
     }
 
-    private void ToolbarItem_Clicked_1(object sender, EventArgs e)
+    private async void ToolbarItem_Clicked_1(object sender, EventArgs e)
     {
-		double soma = lista.Sum(i => i.Total);
+        try
+        {
+            List<Produto> todosProdutos = await App.Db.GetAll();
 
-		string msg = $"O total é {soma:C}";
+            if (todosProdutos == null || todosProdutos.Count == 0)
+            {
+                await DisplayAlert("Relatório", "Nenhum produto cadastrado para calcular.", "OK");
+                return;
+            }
 
-		DisplayAlert("O total dos produtos é", msg, "OK");
+            Dictionary<string, double> relatorioCategoria = new Dictionary<string, double>();
+
+            foreach (Produto p in todosProdutos)
+            {
+                string cat = string.IsNullOrWhiteSpace(p.Categoria) ? "Sem Categoria" : p.Categoria;
+
+                if (relatorioCategoria.ContainsKey(cat))
+                {
+                    relatorioCategoria[cat] += p.Total;
+                }
+                else
+                {
+                    relatorioCategoria[cat] = p.Total;
+                }
+            }
+
+            string mensagem = "Resumo de Gastos por Categoria:\n\n";
+
+            foreach (var item in relatorioCategoria)
+            {
+                mensagem += $"• {item.Key}: {item.Value:C}\n";
+            }
+
+            double totalGeral = todosProdutos.Sum(p => p.Total);
+            mensagem += $"\n-------------------\nTotal Geral: {totalGeral:C}";
+
+            await DisplayAlert("Relatório de Gastos", mensagem, "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
     }
 
     private async void MenuItem_Clicked(object sender, EventArgs e)
