@@ -20,6 +20,11 @@
         <Entry x:Name="txt_preco" Keyboard="Numeric" />
         
         <Label Text="Categoria:"/>
-        <Entry x:Name="txt_categoria" />
+        <Picker x:Name="pck_categoria_cadastro" 
+                Title="Selecione ou escolha uma categoria" />
+        
+        <!-- Campo opcional para nova categoria -->
+        <Entry x:Name="txt_nova_categoria" 
+               Placeholder="Digite uma nova categoria" />
     </VerticalStackLayout>
 </ContentPage>

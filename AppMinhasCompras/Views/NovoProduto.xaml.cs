@@ -13,11 +13,23 @@ public partial class NovoProduto : ContentPage
     {
 		try
 		{
+			string categoriaFinal = txt_nova_categoria.Text;
+
+			if (!string.IsNullOrEmpty(categoriaFinal) && pck_categoria_cadastro.SelectedItem != null)
+			{
+				categoriaFinal = pck_categoria_cadastro.SelectedItem.ToString();
+            }
+
+			if (!string.IsNullOrEmpty(categoriaFinal))
+			{
+				categoriaFinal = char.ToUpper(categoriaFinal[0]) + categoriaFinal.Substring(1).ToLower();
+            }
+
 			Produto p = new Produto
 			{
 				Descricao = txt_descricao.Text,
 				Quantidade = Convert.ToDouble(txt_quantidade.Text),
-				Categoria = txt_categoria.Text,
+				Categoria = txt_nova_categoria.Text,
                 Preco = Convert.ToDouble(txt_preco.Text)
 			};
 
@@ -29,5 +41,25 @@ public partial class NovoProduto : ContentPage
 		{
 			DisplayAlert("Ops", ex.Message, "OK");
 		}
+    }
+
+    private async void CargarCategoriasExistentes()
+    {
+        List<Produto> todos = await App.Db.GetAll();
+
+        // Pega categorias únicas, sem diferenciar maiúsculas/minúsculas
+        var categorias = todos
+            .Where(p => !string.IsNullOrEmpty(p.Categoria))
+            .Select(p => char.ToUpper(p.Categoria[0]) + p.Categoria.Substring(1).ToLower())
+            .Distinct()
+            .ToList();
+
+        pck_categoria_cadastro.ItemsSource = categorias;
+    }
+
+	protected override void OnAppearing()
+    {
+        base.OnAppearing();
+        CargarCategoriasExistentes();
     }
 }

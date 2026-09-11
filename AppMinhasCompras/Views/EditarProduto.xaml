@@ -20,6 +20,11 @@
         <Entry x:Name="txt_preco" Text="{Binding Preco}" Keyboard="Numeric" />
 
         <Label Text="Categoria:"/>
-        <Entry x:Name="txt_categoria" Text="{Binding Categoria}" />
+        <Picker x:Name="pck_categoria_cadastro" 
+        Title="Selecione ou escolha uma categoria" />
+        
+        <!-- Campo opcional para nova categoria -->
+        <Entry x:Name="txt_nova_categoria" Text="{Binding Categoria}" />
+        
     </VerticalStackLayout>
 </ContentPage>
