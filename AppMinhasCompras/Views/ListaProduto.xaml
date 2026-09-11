@@ -21,7 +21,6 @@
 
     <Grid RowDefinitions="Auto, Auto, *" Padding="8" RowSpacing="8">
 
-        <!-- Área do Filtro e Busca -->
         <Border Grid.Row="0"
                 Padding="8"
                 StrokeShape="RoundRectangle 10"
