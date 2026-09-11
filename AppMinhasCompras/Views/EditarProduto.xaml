@@ -21,10 +21,11 @@
 
         <Label Text="Categoria:"/>
         <Picker x:Name="pck_categoria_cadastro" 
-        Title="Selecione ou escolha uma categoria" />
+                Title="Selecione ou escolha uma categoria" />
         
         <!-- Campo opcional para nova categoria -->
-        <Entry x:Name="txt_nova_categoria" Text="{Binding Categoria}" />
+        <Entry x:Name="txt_nova_categoria"
+               Placeholder="Ou digite para alterar a categoria..."/>
         
     </VerticalStackLayout>
 </ContentPage>
