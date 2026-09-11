@@ -15,9 +15,13 @@ public partial class EditarProduto : ContentPage
         {
             Produto produto_anexado = BindingContext as Produto;
 
-            string categoriaFinal = txt_nova_categoria.Text;
+            string categoriaFinal = "";
 
-            if (string.IsNullOrWhiteSpace(categoriaFinal) && pck_categoria_cadastro.SelectedItem != null)
+            if (!string.IsNullOrWhiteSpace(txt_nova_categoria.Text))
+            {
+                categoriaFinal = txt_nova_categoria.Text.Trim();
+            }
+            else if (pck_categoria_cadastro.SelectedItem != null)
             {
                 categoriaFinal = pck_categoria_cadastro.SelectedItem.ToString();
             }
@@ -33,7 +37,7 @@ public partial class EditarProduto : ContentPage
                 Id = produto_anexado.Id,
                 Descricao = txt_descricao.Text,
                 Quantidade = Convert.ToDouble(txt_quantidade.Text),
-                Categoria = txt_nova_categoria.Text,
+                Categoria = categoriaFinal,
                 Preco = Convert.ToDouble(txt_preco.Text)
             };
 
