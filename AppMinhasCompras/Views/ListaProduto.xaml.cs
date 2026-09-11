@@ -24,12 +24,29 @@ public partial class ListaProduto : ContentPage
             List<Produto> tmp = await App.Db.GetAll();
 
 		    tmp.ForEach(i => lista.Add(i));
+
+            PreencherPikerCategorias();
         }
         catch (Exception ex)
         {
             await DisplayAlert("Ops", ex.Message, "OK");
         }
        
+    }
+
+    private async void PreencherPikerCategorias()
+    {
+        List<Produto> lista_produtos = await App.Db.GetAll();
+
+        var categorias = lista_produtos
+            .Where(p => !string.IsNullOrEmpty(p.Categoria))
+            .Select(p => p.Categoria)
+            .Distinct()  
+            .ToList();
+
+        categorias.Insert(0, "Todas");
+
+        pck_categoria.ItemsSource = categorias;
     }
 
     private void ToolbarItem_Clicked(object sender, EventArgs e)
@@ -50,7 +67,9 @@ public partial class ListaProduto : ContentPage
         { 
             string q = e.NewTextValue;
 
-		    lista.Clear();
+            lst_produtos.IsRefreshing = true;
+
+            lista.Clear();
 
             List<Produto> tmp = await App.Db.Search(q);
 
@@ -59,6 +78,10 @@ public partial class ListaProduto : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Ops", ex.Message, "OK");
+        }
+        finally
+        {
+            lst_produtos.IsRefreshing = false;
         }
     }
 
@@ -107,6 +130,53 @@ public partial class ListaProduto : ContentPage
         catch (Exception ex) 
         {
             DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+
+    private async void lst_produtos_Refreshing(object sender, EventArgs e)
+    {
+        try
+        {
+            lista.Clear();
+
+            List<Produto> tmp = await App.Db.GetAll();
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+        finally
+        {
+            lst_produtos.IsRefreshing = false;
+        }
+    }
+
+    private async void pck_categoria_SelectedIndexChanged(object sender, EventArgs e)
+    {
+        try
+        {
+            string categoriaSelecionada = pck_categoria.SelectedItem as string;
+
+            lista.Clear();
+
+            List<Produto> tmp;
+
+            if (string.IsNullOrEmpty(categoriaSelecionada) || categoriaSelecionada == "Todas")
+            {
+                tmp = await App.Db.GetAll();
+            }
+            else
+            {
+                tmp = await App.Db.GetByCategoria(categoriaSelecionada);
+            }
+
+            tmp.ForEach(i => lista.Add(i));
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 }
